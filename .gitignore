@@ -1,0 +1,6 @@
+.idea
+.gradle
+build
+gradle
+settings.gradle
+src/main/examples

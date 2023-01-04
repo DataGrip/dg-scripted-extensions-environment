@@ -1,0 +1,30 @@
+plugins {
+  id 'groovy'
+  id 'java'
+  id "org.jetbrains.intellij" version "1.10.0"
+}
+
+repositories {
+  mavenCentral()
+}
+
+intellij {
+  version = "2022.1.1"
+  type = "IU"
+  plugins = ["DatabaseTools"]
+}
+
+
+tasks.register('extractExamples') {
+    doLast {
+        def collection = configurations.compileClasspath.asCollection()
+        println sourceSets.main.compileClasspath.asCollection()
+        copy {
+            from (zipTree(collection.find { it.name == "database-plugin.jar" })) {
+                include "extensions/**"
+            }
+            into "$rootDir/src/main/examples"
+        }
+    }
+}
+tasks.setupDependencies.finalizedBy tasks.extractExamples
